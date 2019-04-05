@@ -49,6 +49,10 @@ public class TrendFragment extends Fragment {
         arrayList2.add(R.drawable.test2);
         arrayList2.add(R.drawable.test1);
         arrayList2.add(R.drawable.test2);
+        arrayList2.add(R.drawable.test1);
+        arrayList2.add(R.drawable.test2);
+        arrayList2.add(R.drawable.test1);
+        arrayList2.add(R.drawable.test2);
         trendAdapter adapter2 = new trendAdapter(arrayList2);
         recyclerView = v.findViewById(R.id.recycler1);
         recyclerView2 = v.findViewById(R.id.recycler2);
