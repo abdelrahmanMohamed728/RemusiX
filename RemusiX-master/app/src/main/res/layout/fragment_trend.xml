@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".TrendFragment"
+    android:orientation="vertical"
+    android:background="@color/trend">
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Trend"
+         android:textColor="@color/colorPrimary"
+         android:textSize="30sp"
+         android:layout_gravity="center"
+         android:layout_marginTop="20dp"
+         />
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="World"
+         android:textColor="#fff"
+         android:textSize="15sp"
+         android:layout_marginLeft="10dp"
+         />
+    <!-- TODO: Update blank fragment  layout -->
+   <android.support.v7.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:layout_marginTop="10dp"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       android:divider="@android:color/transparent"
+       android:dividerHeight="10.0sp"
+       android:background="@color/trend"
+       android:id="@+id/recycler1"
+
+       ></android.support.v7.widget.RecyclerView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="#fff"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"
+        android:background="@color/trend"
+        android:id="@+id/recycler2"
+        ></android.support.v7.widget.RecyclerView>
+</LinearLayout>
