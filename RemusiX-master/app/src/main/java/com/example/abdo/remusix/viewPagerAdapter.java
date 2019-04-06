@@ -16,8 +16,12 @@ public class viewPagerAdapter extends FragmentPagerAdapter {
             return new HomeFragment();
         }
         else if (i==1)
-            return new NotificationFragment();
+            return new ProfileFragment();
         else if (i==2)
+            return new LocationFragment();
+        else if (i==3)
+            return new NotificationFragment();
+        else if (i==4)
             return new TrendFragment();
         else
             return null;
@@ -25,6 +29,6 @@ public class viewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 5;
     }
 }
