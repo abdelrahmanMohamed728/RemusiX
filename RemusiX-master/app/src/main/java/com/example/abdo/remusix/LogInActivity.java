@@ -38,6 +38,7 @@ public class LogInActivity extends AppCompatActivity {
                  LoadData("https://remusixapi.conveyor.cloud/api/Users/Login?s_email="+email.toString()+"&s_password="+password.toString());
             }
         });
+
     }
     public void LoadData(String url)
     {
@@ -60,7 +61,7 @@ public class LogInActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LogInActivity.this,"check your Email or Password",Toast.LENGTH_LONG).show();
+                Toast.makeText(LogInActivity.this,"Check your Email or Password",Toast.LENGTH_LONG).show();
 
             }
         });
