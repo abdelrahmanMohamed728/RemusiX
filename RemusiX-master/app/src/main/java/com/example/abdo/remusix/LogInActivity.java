@@ -34,38 +34,43 @@ public class LogInActivity extends AppCompatActivity {
         password = findViewById(R.id.logInPass);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                 LoadData("https://remusixapi.conveyor.cloud/api/Users/Login?s_email="+email.toString()+"&s_password="+password.toString());
+            public void onClick(View v)
+            {
+                Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
+                myIntent.putExtra("Email",email.toString());
+                myIntent.putExtra("password",password.toString());
+                startActivity(myIntent);
+                finish();
             }
         });
 
     }
     public void LoadData(String url)
-    {
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,url, null, new Response.Listener<JSONArray>(){
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                   Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
-                   myIntent.putExtra("Email",email.toString());
-                   myIntent.putExtra("password",password.toString());
-                    startActivity(myIntent);
-                    finish();
+        {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,url, null, new Response.Listener<JSONArray>(){
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
+                        myIntent.putExtra("Email",email.toString());
+                        myIntent.putExtra("password",password.toString());
+                        startActivity(myIntent);
+                        finish();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                        Log.e("tag",e.toString());
+                    }
                 }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    Log.e("tag",e.toString());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LogInActivity.this,"Check your Email or Password",Toast.LENGTH_LONG).show();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(LogInActivity.this,"Check your Email or Password",Toast.LENGTH_LONG).show();
 
-            }
-        });
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(request);
+                }
+            });
+            RequestQueue queue = Volley.newRequestQueue(this);
+            queue.add(request);
     }
 }

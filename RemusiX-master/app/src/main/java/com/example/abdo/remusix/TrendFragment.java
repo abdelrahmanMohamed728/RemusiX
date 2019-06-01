@@ -1,14 +1,28 @@
 package com.example.abdo.remusix;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -18,10 +32,10 @@ import java.util.ArrayList;
  */
 public class TrendFragment extends Fragment {
       RecyclerView recyclerView;
-      RecyclerView recyclerView2;
+
 
     public TrendFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -31,43 +45,40 @@ public class TrendFragment extends Fragment {
 
         View v= inflater.inflate(R.layout.fragment_trend, container, false);
         ArrayList<Integer>arrayList = new ArrayList<>();
-        ArrayList<Integer>arrayList2 = new ArrayList<>();
-        arrayList.add(R.drawable.test1);
-        arrayList.add(R.drawable.test2);
-        arrayList.add(R.drawable.test1);
-        arrayList.add(R.drawable.test2);
-        arrayList.add(R.drawable.test1);
-        arrayList.add(R.drawable.test2);
-        arrayList.add(R.drawable.test1);
-        arrayList.add(R.drawable.test2);
+        LoadData("https://api.deezer.com/chart");
         trendAdapter adapter = new trendAdapter(arrayList);
-        arrayList2.add(R.drawable.test1);
-        arrayList2.add(R.drawable.test2);
-        arrayList2.add(R.drawable.test1);
-        arrayList2.add(R.drawable.test2);
-        arrayList2.add(R.drawable.test1);
-        arrayList2.add(R.drawable.test2);
-        arrayList2.add(R.drawable.test1);
-        arrayList2.add(R.drawable.test2);
-        arrayList2.add(R.drawable.test1);
-        arrayList2.add(R.drawable.test2);
-        arrayList2.add(R.drawable.test1);
-        arrayList2.add(R.drawable.test2);
-        trendAdapter adapter2 = new trendAdapter(arrayList2);
         recyclerView = v.findViewById(R.id.recycler1);
-        recyclerView2 = v.findViewById(R.id.recycler2);
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 12, GridLayoutManager.VERTICAL, false);
-        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
+        return v;
+    }
+    public void LoadData(String url)
+    {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>(){
             @Override
-            public int getSpanSize(int position) {
-               return 4;
+            public void onResponse(JSONObject response) {
+                try {
+                     response = response.getJSONObject("tracks");
+                     JSONArray array = response.getJSONArray("data");
+                     JSONObject track = array.getJSONObject(0);
+                     Toast.makeText(getContext(),track.getString("id"),Toast.LENGTH_LONG).show();
+
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.e("tag",e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(),"Invalid",Toast.LENGTH_LONG).show();
+
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView2.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
-        recyclerView2.setAdapter(adapter2);
-        return v;
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(request);
     }
 
 }

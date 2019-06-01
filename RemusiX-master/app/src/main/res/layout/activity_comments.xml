@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/notification"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.abdo.remusix.Actvity.CommentsActivity"
+    tools:context="com.example.abdo.remusix.CommentsActivity"
     android:orientation="vertical">
 
     >
