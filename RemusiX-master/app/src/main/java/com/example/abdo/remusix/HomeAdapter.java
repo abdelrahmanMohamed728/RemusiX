@@ -28,9 +28,9 @@ public class HomeAdapter extends ArrayAdapter<HomeData> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
 
-        if(convertView==null) {
+
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.home_listitem, null, false);
-        }
+
         image=convertView.findViewById(R.id.img);
         Singer_image=convertView.findViewById(R.id.singer_img);
         name= convertView.findViewById(R.id.name);

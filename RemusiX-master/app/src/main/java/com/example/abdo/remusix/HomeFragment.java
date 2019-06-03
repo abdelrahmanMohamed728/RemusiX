@@ -1,11 +1,13 @@
 package com.example.abdo.remusix;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -37,6 +39,12 @@ public class HomeFragment extends Fragment {
         list= view.findViewById(R.id.listview);
         adapter = new HomeAdapter(getContext (),R.layout.fragment_home,data);
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(getActivity(),CommentsActivity.class));
+            }
+        });
         return view;
     }
 

@@ -24,6 +24,7 @@ public class CommentsActivity extends AppCompatActivity {
         comment.add(new Comment ("Ahmed","6 min ago","+5","hello Comment here",R.drawable.test1));
         comment.add(new Comment ("Mohmaed","12 min ago","+2","hello here",R.drawable.test1));
         list= findViewById(R.id.comment_listview);
+        adapter = new CommentAdapter(CommentsActivity.this,comment);
         list.setAdapter(adapter);
     }
 }

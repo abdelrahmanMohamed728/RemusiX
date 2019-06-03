@@ -18,8 +18,8 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         ImageView user_image;
         TextView user_name,num_like,comment_tv,comment_time;
 
-  public CommentAdapter(@NonNull Context context, int resource, ArrayList<Comment> info) {
-        super(context, resource,info);
+  public CommentAdapter(@NonNull Context context,  ArrayList<Comment> info) {
+        super(context, 0,info);
         }
 
 

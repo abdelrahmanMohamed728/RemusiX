@@ -1,10 +1,8 @@
 package com.example.abdo.remusix;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +15,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -27,9 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class TrendFragment extends Fragment {
       RecyclerView recyclerView;
 
@@ -37,19 +32,21 @@ public class TrendFragment extends Fragment {
     public TrendFragment() {
 
     }
-
+   ArrayList<Song>arrayList;
+    SongTrendAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v= inflater.inflate(R.layout.fragment_trend, container, false);
-        ArrayList<Integer>arrayList = new ArrayList<>();
+        arrayList = new ArrayList<>();
         LoadData("https://api.deezer.com/chart");
-        trendAdapter adapter = new trendAdapter(arrayList);
+         adapter = new SongTrendAdapter(arrayList);
         recyclerView = v.findViewById(R.id.recycler1);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
+
         return v;
     }
     public void LoadData(String url)
@@ -60,8 +57,17 @@ public class TrendFragment extends Fragment {
                 try {
                      response = response.getJSONObject("tracks");
                      JSONArray array = response.getJSONArray("data");
-                     JSONObject track = array.getJSONObject(0);
-                     Toast.makeText(getContext(),track.getString("id"),Toast.LENGTH_LONG).show();
+                     for (int i =0;i<10;i++) {
+                         JSONObject track = array.getJSONObject(i);
+                         String img = track.getJSONObject("artist").getString("picture_small");
+                         String name = track.getString("title");
+                         String link = track.getString("link");
+                         String artistid = track.getJSONObject("artist").getString("id");
+                         String id = track.getString("id");
+                         arrayList.add(new Song(img,name,id,link,artistid));
+                         adapter.notifyDataSetChanged();
+                     }
+
 
                 }
                 catch (Exception e)
