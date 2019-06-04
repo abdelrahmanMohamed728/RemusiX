@@ -1,8 +1,11 @@
 package com.example.abdo.remusix;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,7 +29,7 @@ public class ArtistActivity extends AppCompatActivity {
    TextView txt;
    ArtistAdapter adapter;
    ListView listView;
-   ArrayList<String>arrayList;
+   ArrayList<Song>arrayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +37,21 @@ public class ArtistActivity extends AppCompatActivity {
         img = findViewById(R.id.artistImg);
         txt = findViewById(R.id.artistName);
         listView = findViewById(R.id.artistList);
-        LoadData("https://api.deezer.com/artist/"+getIntent().getStringExtra("artistID"));
+        String id = getIntent().getStringExtra("artistid");
+        LoadData("https://api.deezer.com/artist/"+id);
        arrayList = new ArrayList<>();
-        LoadData1("https://api.deezer.com/artist/"+getIntent().getStringExtra("artistID")+"top");
+        LoadData1("https://api.deezer.com/artist/"+id+"/top");
         adapter = new ArtistAdapter(ArtistActivity.this,arrayList);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Song s = arrayList.get(position);
+                Intent intent = new Intent(ArtistActivity.this,SongActivity.class);
+                intent.putExtra("songid",s.getId());
+                startActivity(intent);
+            }
+        });
 
     }
     public void LoadData(String url)
@@ -77,7 +90,8 @@ public class ArtistActivity extends AppCompatActivity {
                     for (int i =0;i<5;i++)
                     {
                         JSONObject object = array.getJSONObject(i);
-                        arrayList.add(object.getString("title"));
+                        arrayList.add(new Song("",object.getString("title"),object.getString("id"),null,null));
+                        adapter.notifyDataSetChanged();
                     }
 
 

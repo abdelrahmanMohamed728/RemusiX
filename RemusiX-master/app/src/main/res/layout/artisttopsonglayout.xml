@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:text="aaa"
-        android:layout_marginTop="10dp"
         android:textColor="#fff"
         android:background="@color/colorPrimary"
         android:id="@+id/topSong"/>

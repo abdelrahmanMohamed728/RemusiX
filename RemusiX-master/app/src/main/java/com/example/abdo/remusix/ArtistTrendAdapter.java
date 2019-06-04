@@ -14,9 +14,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class SongTrendAdapter extends RecyclerView.Adapter<SongTrendAdapter.MyViewHolder> {
+public class ArtistTrendAdapter extends RecyclerView.Adapter<ArtistTrendAdapter.MyViewHolder> {
     ImageView img;
-    ArrayList<Song>arrayList;
+    ArrayList<Artist>arrayList;
     private Context context;
     @NonNull
     @Override
@@ -27,7 +27,7 @@ public class SongTrendAdapter extends RecyclerView.Adapter<SongTrendAdapter.MyVi
         return new MyViewHolder(itemView);
     }
 
-    public SongTrendAdapter(ArrayList<Song>a) {
+    public ArtistTrendAdapter(ArrayList<Artist>a) {
         arrayList = a;
     }
 
@@ -37,9 +37,9 @@ public class SongTrendAdapter extends RecyclerView.Adapter<SongTrendAdapter.MyVi
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Song s = arrayList.get(i);
-                Intent intent = new Intent(context,SongActivity.class);
-                intent.putExtra("songid",s.getId());
+                Artist s = arrayList.get(i);
+                Intent intent = new Intent(context,ArtistActivity.class);
+                intent.putExtra("artistid",s.getId());
                 context.startActivity(intent);
             }
         });

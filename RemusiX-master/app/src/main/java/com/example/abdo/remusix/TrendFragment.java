@@ -27,13 +27,16 @@ import java.util.ArrayList;
 
 public class TrendFragment extends Fragment {
       RecyclerView recyclerView;
+      RecyclerView recyclerView1;
 
 
     public TrendFragment() {
 
     }
    ArrayList<Song>arrayList;
+    ArrayList<Artist>arrayList1;
     SongTrendAdapter adapter;
+    ArtistTrendAdapter adapter1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,12 +44,16 @@ public class TrendFragment extends Fragment {
 
         View v= inflater.inflate(R.layout.fragment_trend, container, false);
         arrayList = new ArrayList<>();
+        arrayList1 = new ArrayList<>();
         LoadData("https://api.deezer.com/chart");
          adapter = new SongTrendAdapter(arrayList);
         recyclerView = v.findViewById(R.id.recycler1);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
-
+        adapter1 = new ArtistTrendAdapter(arrayList1);
+        recyclerView1 = v.findViewById(R.id.recycler2);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView1.setAdapter(adapter1);
         return v;
     }
     public void LoadData(String url)
@@ -55,9 +62,10 @@ public class TrendFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                     JSONObject response1= response.getJSONObject("artists");
                      response = response.getJSONObject("tracks");
                      JSONArray array = response.getJSONArray("data");
-                     for (int i =0;i<10;i++) {
+                     for (int i =0;i<9;i++) {
                          JSONObject track = array.getJSONObject(i);
                          String img = track.getJSONObject("artist").getString("picture_small");
                          String name = track.getString("title");
@@ -67,7 +75,16 @@ public class TrendFragment extends Fragment {
                          arrayList.add(new Song(img,name,id,link,artistid));
                          adapter.notifyDataSetChanged();
                      }
-
+                    JSONArray array1 = response1.getJSONArray("data");
+                     for (int i =0;i<9;i++)
+                     {
+                         JSONObject artist = array1.getJSONObject(i);
+                         String name = artist.getString("name");
+                         String id = artist.getString("id");
+                         String img = artist.getString("picture_small");
+                         arrayList1.add(new Artist(id,name,img));
+                         adapter1.notifyDataSetChanged();
+                     }
 
                 }
                 catch (Exception e)
