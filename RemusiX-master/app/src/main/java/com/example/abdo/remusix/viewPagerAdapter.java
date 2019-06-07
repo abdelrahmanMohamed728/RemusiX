@@ -23,12 +23,14 @@ public class viewPagerAdapter extends FragmentPagerAdapter {
             return new NotificationFragment();
         else if (i==4)
             return new TrendFragment();
+        else if (i==5)
+            return new SearchFragment();
         else
             return null;
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 }

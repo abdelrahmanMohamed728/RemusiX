@@ -22,5 +22,6 @@ public class MainActivity extends AppCompatActivity {
         tab1.getTabAt(2).setIcon(R.drawable.location);
         tab1.getTabAt(3).setIcon(R.drawable.notification);
         tab1.getTabAt(4).setIcon(R.drawable.trend);
+        tab1.getTabAt(5).setIcon(R.drawable.search);
     }
 }

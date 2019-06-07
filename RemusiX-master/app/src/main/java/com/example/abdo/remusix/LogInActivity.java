@@ -47,9 +47,9 @@ public class LogInActivity extends AppCompatActivity {
     }
     public void LoadData(String url)
         {
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET,url, null, new Response.Listener<JSONArray>(){
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>(){
                 @Override
-                public void onResponse(JSONArray response) {
+                public void onResponse(JSONObject response) {
                     try {
                         Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
                         myIntent.putExtra("Email",email.toString());
@@ -66,7 +66,7 @@ public class LogInActivity extends AppCompatActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(LogInActivity.this,"Check your Email or Password",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LogInActivity.this,"Error !",Toast.LENGTH_LONG).show();
 
                 }
             });
