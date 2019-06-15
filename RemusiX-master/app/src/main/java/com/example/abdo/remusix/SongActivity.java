@@ -36,7 +36,7 @@ public class SongActivity extends AppCompatActivity {
     String songLink;
     TextView artistName;
     Boolean check;
-
+  String id;
     @Override
     protected void onStart() {
         super.onStart();
@@ -52,37 +52,43 @@ public class SongActivity extends AppCompatActivity {
         artistName = findViewById(R.id.artistName);
         check = false;
         btn = findViewById(R.id.songButton);
-        final String id = getIntent().getStringExtra("songid");
+         id = getIntent().getStringExtra("songid");
         LoadData("https://api.deezer.com/track/"+id);
-        String applicationID="351984";
-        DeezerConnect deezerConnect = new DeezerConnect(SongActivity.this, applicationID);
 
-        try {
-          final TrackPlayer  trackPlayer = new TrackPlayer(getApplication(), deezerConnect, new WifiAndMobileNetworkStateChecker());
+
+
+
+
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    String applicationID = "351984";
+                    DeezerConnect deezerConnect = new DeezerConnect(SongActivity.this, applicationID);
 
+                    TrackPlayer trackPlayer = null;
+                    try {
+                        trackPlayer = new TrackPlayer(getApplication(), deezerConnect, new WifiAndMobileNetworkStateChecker());
+                    } catch (TooManyPlayersExceptions tooManyPlayersExceptions) {
+                        tooManyPlayersExceptions.printStackTrace();
+                    } catch (DeezerError deezerError) {
+                        deezerError.printStackTrace();
+                    }
                     if (!check) {
 
-                          trackPlayer.playTrack(Long.parseLong(id));
+                        trackPlayer.playTrack(Long.parseLong(id));
                         check = true;
                         btn.setText("Stop");
-                    }
-                    else {
+                    } else {
                         trackPlayer.stop();
-                        check=false;
+                        check = false;
                         btn.setText("Listen Now");
 
                     }
                 }
+
             });
 
-        } catch (TooManyPlayersExceptions tooManyPlayersExceptions) {
-            tooManyPlayersExceptions.printStackTrace();
-        } catch (DeezerError deezerError) {
-            deezerError.printStackTrace();
-        }
+
 
 
     }
@@ -92,7 +98,6 @@ public class SongActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-
 
                         JSONObject track = response;
                         String img = track.getJSONObject("artist").getString("picture_small");

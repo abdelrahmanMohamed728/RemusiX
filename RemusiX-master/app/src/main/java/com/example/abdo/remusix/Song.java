@@ -6,6 +6,15 @@ public class Song {
     private String id;
     private String link;
     private String ArtistId;
+    private String ArtistName;
+
+    public String getArtistName() {
+        return ArtistName;
+    }
+
+    public void setArtistName(String artistName) {
+        ArtistName = artistName;
+    }
 
     public Song(String img, String name, String id, String link, String artistId) {
         this.img = img;

@@ -16,7 +16,7 @@
         android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:src="@drawable/test1"
+
         android:id="@+id/artistImg"/>
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:textSize="30sp"
         android:textColor="#000"
-        android:text="Artist"
+
         android:id="@+id/artistName"
         android:layout_marginTop="20dp"
         />

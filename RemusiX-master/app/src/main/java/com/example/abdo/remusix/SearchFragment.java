@@ -3,7 +3,9 @@ package com.example.abdo.remusix;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,70 +35,27 @@ public class SearchFragment extends Fragment {
 
 
     public SearchFragment() {
-        // Required empty public constructor
     }
- ArtistSearchAdapter adapter;
-    ArrayList<Artist>list;
-    ListView listView;
+    ViewPager viewPager1;
     EditText search;
-    Button btn;
+    Button btn1;
+    TabLayout tab1;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v= inflater.inflate(R.layout.fragment_search, container, false);
-          list = new ArrayList<>();
-          listView = v.findViewById(R.id.artistListSearch);
-          search =v.findViewById(R.id.artistsearchedittext);
-        btn = v.findViewById(R.id.artistsearchbtn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoadData("https://api.deezer.com/search/artist?q="+search.getText().toString());
-                adapter = new ArtistSearchAdapter(getContext(),list);
-                listView.setAdapter(adapter);
-            }
-        });
-         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-             @Override
-             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                 Artist artist = list.get(position);
-                 Intent intent= new Intent(getActivity(),ArtistActivity.class);
-                 intent.putExtra("artistid",artist.getId());
-                 startActivity(intent);
-             }
-         });
+        viewPager1 = v.findViewById(R.id.viewpager2);
+
+        tab1 = v.findViewById(R.id.tabLayout2);
+        SearchViewPagerAdapter adapter = new SearchViewPagerAdapter(getActivity().getSupportFragmentManager());
+        viewPager1.setAdapter(adapter);
+
+        tab1.setupWithViewPager(viewPager1);
+        tab1.getTabAt(0).setText("Artists");
+        tab1.getTabAt(1).setText("Songs");
+        tab1.getTabAt(2).setText("Users");
         return v;
     }
-    public void LoadData(String url)
-    {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>(){
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray array = response.getJSONArray("data");
-                    for (int i =0;i<array.length();i++)
-                    {
-                        JSONObject object = array.getJSONObject(i);
-                        list.add(new Artist(object.getString("id"),object.getString("name"),object.getString("picture_small")));
-                             adapter.notifyDataSetChanged();
-                    }
 
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    Log.e("tag",e.toString());
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        });
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        queue.add(request);
-    }
 }

@@ -30,9 +30,7 @@ public class TrendFragment extends Fragment {
       RecyclerView recyclerView1;
 
 
-    public TrendFragment() {
 
-    }
    ArrayList<Song>arrayList;
     ArrayList<Artist>arrayList1;
     SongTrendAdapter adapter;
