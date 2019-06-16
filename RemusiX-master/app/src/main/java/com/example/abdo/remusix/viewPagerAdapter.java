@@ -3,8 +3,9 @@ package com.example.abdo.remusix;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class viewPagerAdapter extends FragmentPagerAdapter {
+public class viewPagerAdapter extends FragmentStatePagerAdapter {
     public viewPagerAdapter(FragmentManager fm) {
         super(fm);
     }

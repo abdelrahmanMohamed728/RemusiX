@@ -17,10 +17,7 @@ import com.example.abdo.remusix.api.LoginServiceResponse;
 import com.example.abdo.remusix.api.RegisterServiceResponse;
 import com.example.abdo.remusix.api.RetrofitClient;
 
-import org.w3c.dom.Text;
-
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -102,8 +99,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
-    //retrofit method for register
     private void register(RegisterServiceResponse user) {
 
         retrofit= RetrofitClient.getInstance();
@@ -134,15 +129,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    // method for checking existence of an username
     private  Boolean isexist(String email){
         retrofit= RetrofitClient.getInstance();
         apiService=retrofit.create(ApiService.class);
-
         final Boolean[] ans = {false};
 
-        Call<Boolean> booleanCall = apiService.userExistance(email);
-
+        Call<Boolean> booleanCall = apiService.userExistence(email);
         booleanCall.enqueue(new Callback<Boolean>() {
             Boolean s=false;
             @Override
@@ -163,9 +155,6 @@ public class SignUpActivity extends AppCompatActivity {
         return ans[0];
     }
 
-
-
-    //method for checking existance of an email
     private  Boolean login(String email ,String password){
         retrofit= RetrofitClient.getInstance();
         apiService=retrofit.create(ApiService.class);

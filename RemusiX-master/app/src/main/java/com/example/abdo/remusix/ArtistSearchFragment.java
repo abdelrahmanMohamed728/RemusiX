@@ -47,9 +47,7 @@ public class ArtistSearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v= inflater.inflate(R.layout.fragment_artist_search, container, false);
-        Log.e("tag","opened");
         listView = v.findViewById(R.id.artistListSearch);
         btn = getActivity().findViewById(R.id.artistsearchbtn);
         search = getActivity().findViewById(R.id.artistsearchedittext);
@@ -57,13 +55,12 @@ public class ArtistSearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 list = new ArrayList<>();
-                Log.e("tag","clicked");
+                Log.e("tag","clicked1");
                 LoadData("https://api.deezer.com/search/artist?q="+search.getText().toString());
                 adapter = new ArtistSearchAdapter(getContext(),list);
                 listView.setAdapter(adapter);
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,6 +78,19 @@ public class ArtistSearchFragment extends Fragment {
 
         super.onStart();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
 
     public void LoadData(String url)
     {

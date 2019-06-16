@@ -53,13 +53,12 @@ public class SongSearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 list = new ArrayList<>();
+                Log.e("tag","clicked2");
                 LoadData("https://api.deezer.com/search/track?q="+search.getText().toString());
                 adapter = new SongSearchAdapter(getContext(),list);
-                Log.e("tag","clicked2");
                 listView.setAdapter(adapter);
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

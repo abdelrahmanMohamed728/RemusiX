@@ -3,8 +3,9 @@ package com.example.abdo.remusix;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class SearchViewPagerAdapter extends FragmentPagerAdapter {
+public class SearchViewPagerAdapter extends FragmentStatePagerAdapter {
     public SearchViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -17,13 +18,12 @@ public class SearchViewPagerAdapter extends FragmentPagerAdapter {
         }
         else if (i==1)
             return new SongSearchFragment();
-        else
-            return new UserSearchFragment();
+        else return null;
 
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 }

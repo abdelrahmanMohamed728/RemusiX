@@ -25,19 +25,38 @@
        android:layout_marginTop="10dp"
        android:id="@+id/artistsearchbtn"
        />
-    <android.support.design.widget.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:id="@+id/tabLayout2"
-        android:background="@color/colorPrimary"
-        app:tabTextColor="#fff">
-    </android.support.design.widget.TabLayout>
-    <android.support.v4.view.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/viewpager2">
-    </android.support.v4.view.ViewPager>
-
+      <RadioGroup
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:layout_marginTop="10dp"
+          android:id="@+id/radioGroup1">
+          <RadioButton
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:text="Artists"
+              android:id="@+id/radioArtist"
+              />
+          <RadioButton
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:text="Songs"
+              android:id="@+id/radioSong"
+              />
+          <RadioButton
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:text="Users"
+              android:id="@+id/radioUsers"
+              />
+      </RadioGroup>
+   <ListView
+       android:layout_width="match_parent"
+       android:layout_marginTop="10dp"
+       android:layout_height="wrap_content"
+       android:id="@+id/searchListView"></ListView>
 
 </LinearLayout>
