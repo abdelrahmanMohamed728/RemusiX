@@ -1,6 +1,7 @@
 package com.example.abdo.remusix;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ public class LogInActivity extends AppCompatActivity {
    Button btn;
    EditText email;
    EditText password;
+   SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,7 @@ public class LogInActivity extends AppCompatActivity {
                 Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
                 myIntent.putExtra("Email",email.toString());
                 myIntent.putExtra("password",password.toString());
+                myIntent.putExtra("username",email.getText().toString());
                 startActivity(myIntent);
                 finish();
             }
@@ -52,9 +55,17 @@ public class LogInActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
-                        myIntent.putExtra("Email",email.toString());
+                        myIntent.putExtra("email",email.toString());
                         myIntent.putExtra("password",password.toString());
+                        myIntent.putExtra("userid",response.getString("UserID"));
+                        myIntent.putExtra("username",response.getString("UserName"));
                         startActivity(myIntent);
+                        sharedPreferences = getSharedPreferences("MyPref",MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("email",email.toString());
+                        editor.putString("Password",password.toString());
+                        editor.putString("userid",response.getString("UserID"));
+                        editor.putString("username",response.getString("UserName"));
                         finish();
                     }
                     catch (Exception e)

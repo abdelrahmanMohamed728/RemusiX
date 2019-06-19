@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.abdo.remusix.api.NearbyUsersResponse;
-import com.example.abdo.remusix.api.RegisterServiceResponse;
 
 import java.util.List;
 

@@ -94,8 +94,6 @@ public class TrendFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(),"Invalid",Toast.LENGTH_LONG).show();
-
             }
         });
         RequestQueue queue = Volley.newRequestQueue(getContext());

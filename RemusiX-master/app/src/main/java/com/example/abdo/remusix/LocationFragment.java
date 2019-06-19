@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -68,6 +69,7 @@ public class LocationFragment extends Fragment {
     private ApiService apiService;
     Context context;
     FragmentActivity activity;
+    private String bestProvider=LocationManager.NETWORK_PROVIDER;
 
     public LocationFragment() {
         // Required empty public constructor
@@ -93,11 +95,45 @@ public class LocationFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.location_list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        recyclerView.setAdapter(new LocationAdapter(getContext(),mysers));
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (!runTime_Permission()) {
 
-            locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            }else {
+
+                Location lastKnownLocation = locationManager.getLastKnownLocation(bestProvider);
+                if (lastKnownLocation != null) {
+                    retrofit = RetrofitClient.getInstance();
+                    apiService = retrofit.create(ApiService.class);
+                    Log.e("location ", lastKnownLocation.getLongitude() + " " + lastKnownLocation.getAltitude());
+                    Call<Boolean> call = apiService.updateUserLocation("ahmed_mohamed", lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                    call.enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            Log.e("eeeeeeeeeeeeeeeeeeee", response.body() + "");
+                            if (response.isSuccessful()) {
+                                Toast.makeText(getActivity().getApplicationContext(), "Location updated", Toast.LENGTH_SHORT << 3).show();
+
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), "something is wrong", Toast.LENGTH_SHORT << 4).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+
 
             configureLocation();
         }
@@ -127,120 +163,84 @@ public class LocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location lastKnownLocation) {
+                        retrofit = RetrofitClient.getInstance();
+                        apiService = retrofit.create(ApiService.class);
 
+                        if (lastKnownLocation != null) {
+                            Log.e("location ", lastKnownLocation.getLongitude() + " " + lastKnownLocation.getAltitude());
+                            Call<Boolean> call = apiService.updateUserLocation("ahmed_mohamed", lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                            call.enqueue(new Callback<Boolean>() {
+                                @Override
+                                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                    Log.e("eeeeeeeeeeeeeeeeeeee", response.body() + "");
+                                    if (response.isSuccessful() ) {
+                                        Toast.makeText(context, "Location updated", Toast.LENGTH_SHORT << 3).show();
+
+                                    } else {
+                                        Toast.makeText(context, "something is wrong", Toast.LENGTH_SHORT << 4).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Boolean> call, Throwable t) {
+
+                                }
+                            });
+
+                            Call<NearbyUsersResponse[]> nearbyUsers = apiService.getNearbyUsers("ahmed_mohamed", lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                            nearbyUsers.enqueue(new Callback<NearbyUsersResponse[]>() {
+                                @Override
+                                public void onResponse(Call<NearbyUsersResponse[]> call, Response<NearbyUsersResponse[]> response) {
+                                    if (response.isSuccessful()&&response.body()!=null){
+                                        mysers.clear();
+                                        for (int i = 0; i < response.body().length; i++) {
+                                            mysers.add(response.body()[i]);
+                                        }
+                                        locationAdapter=new LocationAdapter(getActivity().getApplicationContext(),mysers);
+                                        recyclerView.setAdapter(locationAdapter);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<NearbyUsersResponse[]> call, Throwable t) {
+
+                                }
+                            });
+
+                        }
+                    }
+
+
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                };
+                locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
+                        permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                if (lastKnownLocation != null) {
-                    retrofit = RetrofitClient.getInstance();
-                    apiService = retrofit.create(ApiService.class);
-
-
-                    Log.e("location ", lastKnownLocation.getLongitude() + " " + lastKnownLocation.getAltitude());
-                    Call<Boolean> call = apiService.updateUserLocation(
-                            "cc_cc", lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
-                    call.enqueue(new Callback<Boolean>() {
-                        @Override
-                        public void onResponse(@NonNull Call<Boolean> call, @NonNull Response<Boolean> response) {
-                            Log.e("eeeeeeeeeeeeeeeeeeee", response.body() + "");
-                            if (response.isSuccessful()) {
-                                Toast.makeText(context, "Location updated", Toast.LENGTH_SHORT << 3).show();
-
-
-                            } else {
-                                Toast.makeText(context, "something is wrong "+response.message(), Toast.LENGTH_SHORT << 4).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
-
-                        }
-                    });
-
-                    Call<NearbyUsersResponse[]> nearbyUsers = apiService.getNearbyUsers("ahmed_mohamed", lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
-                    nearbyUsers.enqueue(new Callback<NearbyUsersResponse[]>() {
-                        @Override
-                        public void onResponse(Call<NearbyUsersResponse[]> call, Response<NearbyUsersResponse[]> response) {
-                            if (response.isSuccessful()&&response.body()!=null){
-                                mysers.clear();
-                                for (int i = 0; i < response.body().length; i++) {
-                                    mysers.add(response.body()[i]);
-                                }
-                                locationAdapter=new LocationAdapter(getActivity().getApplicationContext(),mysers);
-                                recyclerView.setAdapter(locationAdapter);
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<NearbyUsersResponse[]> call, Throwable t) {
-
-                        }
-                    });
-
-                }
-//                locationListener = new LocationListener() {
-//                    @Override
-//                    public void onLocationChanged(Location location) {
-//
-//                        retrofit = RetrofitClient.getInstance();
-//                        apiService = retrofit.create(ApiService.class);
-//
-//
-//                        if (location != null) {
-//                            Log.e("location ", location.getLongitude() + " " + location.getAltitude());
-//                            Call<Boolean> call = apiService.updateUserLocation("ahmed_mohamed", location.getLongitude(), location.getLatitude());
-//                            call.enqueue(new Callback<Boolean>() {
-//                                @Override
-//                                public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-//                                    Log.e("eeeeeeeeeeeeeeeeeeee", response.body() + "");
-//                                    if (response.isSuccessful() && response.body()) {
-//                                        Toast.makeText(context, "Location updated", Toast.LENGTH_SHORT << 3).show();
-//
-//
-//                                    } else {
-//                                        Toast.makeText(context, "something is wrong", Toast.LENGTH_SHORT << 4).show();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<Boolean> call, Throwable t) {
-//
-//                                }
-//                            });
-//
-//
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onProviderEnabled(String provider) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onProviderDisabled(String provider) {
-//                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        startActivity(intent);
-//                    }
-//                };
-//                locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//
-//                if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(),
-//                        permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-//                        ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    return;
-//                }
-//                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, locationListener);
+                locationManager.requestLocationUpdates(bestProvider!=null?bestProvider:LocationManager.NETWORK_PROVIDER, 2000, 5, locationListener);
             }
         });
 

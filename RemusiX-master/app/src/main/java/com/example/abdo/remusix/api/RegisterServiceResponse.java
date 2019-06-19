@@ -1,11 +1,6 @@
 
 package com.example.abdo.remusix.api;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import retrofit2.http.Field;
-
 public class RegisterServiceResponse {
 
       private String UserName;
@@ -37,5 +32,99 @@ public class RegisterServiceResponse {
         Birthdate = birthdate;
     }
 
+    public String getUserName() {
+        return UserName;
+    }
 
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public String getUserPassword() {
+        return UserPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        UserPassword = userPassword;
+    }
+
+    public String getFirstName() {
+        return FirstName;
+    }
+
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public String getLastName() {
+        return LastName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
+    public String getPhoto() {
+        return Photo;
+    }
+
+    public void setPhoto(String photo) {
+        Photo = photo;
+    }
+
+    public String getBackground() {
+        return Background;
+    }
+
+    public void setBackground(String background) {
+        Background = background;
+    }
+
+    public Character getGender() {
+        return Gender;
+    }
+
+    public void setGender(Character gender) {
+        Gender = gender;
+    }
+
+    public String getFacebookUsername() {
+        return FacebookUsername;
+    }
+
+    public void setFacebookUsername(String facebookUsername) {
+        FacebookUsername = facebookUsername;
+    }
+
+    public String getGoogleUsername() {
+        return GoogleUsername;
+    }
+
+    public void setGoogleUsername(String googleUsername) {
+        GoogleUsername = googleUsername;
+    }
+
+    public String getSoundcloudUsername() {
+        return SoundcloudUsername;
+    }
+
+    public void setSoundcloudUsername(String soundcloudUsername) {
+        SoundcloudUsername = soundcloudUsername;
+    }
+
+    public Object getBirthdate() {
+        return Birthdate;
+    }
+
+    public void setBirthdate(Object birthdate) {
+        Birthdate = birthdate;
+    }
 }

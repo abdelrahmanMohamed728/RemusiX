@@ -1,15 +1,9 @@
 package com.example.abdo.remusix.api;
 
-import android.util.JsonToken;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -40,6 +34,9 @@ public interface ApiService {
     @GET("/api/Users/NearbyUsers")
     Call<NearbyUsersResponse[]> getNearbyUsers(@Query("s_username") String Username, @Query("s_longitude") double longitude, @Query("s_latitude") double latitude);
 
+
+    @GET("/api/Users/GetUser")
+    Call<RegisterServiceResponse>searchUserByEmail(@Query("s_email") String email);
 
 
 }

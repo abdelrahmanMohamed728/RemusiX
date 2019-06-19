@@ -10,7 +10,7 @@
         android:textSize="25sp"
         android:text="aaa"
         android:textColor="#fff"
-        android:background="@color/colorPrimary"
+
         android:id="@+id/topSong"/>
 
 </LinearLayout>

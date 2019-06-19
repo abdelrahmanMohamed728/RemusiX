@@ -7,6 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.deezer.sdk.model.User;
+import com.example.abdo.remusix.api.ApiService;
+import com.example.abdo.remusix.api.RegisterServiceResponse;
+import com.example.abdo.remusix.api.RetrofitClient;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -32,9 +38,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+
 
 public class SearchFragment extends Fragment {
 
+
+    private Retrofit instance;
+    ApiService apiService;
 
     public SearchFragment() {
     }
@@ -42,12 +55,16 @@ public class SearchFragment extends Fragment {
     ArrayList<Song> list1;
     EditText search;
     Button btn1;
-     RadioGroup radioGroup;
-     ListView listView;
+    RadioGroup radioGroup;
+    ListView listView;
     ArtistSearchAdapter adapter;
     ArrayList<Artist>list;
+
+    UserSearchByEmailAdapter locationAdapter;
+    RecyclerView  recyclerView;
+
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v= inflater.inflate(R.layout.fragment_search, container, false);
@@ -57,11 +74,18 @@ public class SearchFragment extends Fragment {
         search = v.findViewById(R.id.artistsearchedittext);
         listView = v.findViewById(R.id.searchListView);
 
+
+
+
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int id = radioGroup.getCheckedRadioButtonId();
-                if (id==R.id.radioArtist)
+                if (id==-1){
+                    Toast.makeText(getContext(), "please check one of the follwing buttons", Toast.LENGTH_SHORT).show();
+                }
+                else if (id==R.id.radioArtist)
                 {
 
                     list = new ArrayList<>();
@@ -98,12 +122,44 @@ public class SearchFragment extends Fragment {
                 }
                 else
                 {
-                    listView.setAdapter(null);
+                    final ArrayList<RegisterServiceResponse> mylist= new ArrayList<>();
+                    instance = RetrofitClient.getInstance();
+
+
+                    apiService= instance.create(ApiService.class);
+
+                    if (!TextUtils.isEmpty(search.getText().toString())){
+                        Call<RegisterServiceResponse> searchUserByEmail = apiService.searchUserByEmail(search.getText().toString());
+                        searchUserByEmail.enqueue(new Callback<RegisterServiceResponse>() {
+                            @Override
+                            public void onResponse(Call<RegisterServiceResponse> call, retrofit2.Response<RegisterServiceResponse> response) {
+                                if (response.isSuccessful()&&response.body()!=null) {
+                                    mylist.clear();
+                                    mylist.add(response.body());
+                                    locationAdapter = new UserSearchByEmailAdapter(getContext(), mylist);
+                                    listView.setAdapter(locationAdapter);
+                                }else {
+                                    Toast.makeText(getContext(), "No such User ", Toast.LENGTH_SHORT<<5).show();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<RegisterServiceResponse> call, Throwable t) {
+                                Toast.makeText(getContext(), "helllo", Toast.LENGTH_SHORT<<3).show();
+                            }
+                        });
+                    }
+
+
                 }
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        if (checkedId==R.id.radioArtist)
+                        if (checkedId==-1){
+                            Toast.makeText(getContext(), "please check one of the follwing buttons", Toast.LENGTH_SHORT).show();
+                        }
+                        else if (checkedId==R.id.radioArtist)
                         {
 
                             list = new ArrayList<>();
@@ -140,7 +196,35 @@ public class SearchFragment extends Fragment {
                         }
                         else
                         {
-                            listView.setAdapter(null);
+                            final ArrayList<RegisterServiceResponse> mylist= new ArrayList<>();
+                            instance = RetrofitClient.getInstance();
+
+
+                            apiService= instance.create(ApiService.class);
+
+                            if (!TextUtils.isEmpty(search.getText().toString())){
+                                Call<RegisterServiceResponse> searchUserByEmail = apiService.searchUserByEmail(search.getText().toString());
+                                searchUserByEmail.enqueue(new Callback<RegisterServiceResponse>() {
+                                    @Override
+                                    public void onResponse(Call<RegisterServiceResponse> call, retrofit2.Response<RegisterServiceResponse> response) {
+                                        if (response.isSuccessful()&&response.body()!=null) {
+                                            mylist.clear();
+                                            mylist.add(response.body());
+                                            locationAdapter = new UserSearchByEmailAdapter(getContext(), mylist);
+                                            listView.setAdapter(locationAdapter);
+                                        }else {
+                                            Toast.makeText(getContext(), "No such User2", Toast.LENGTH_SHORT<<5).show();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<RegisterServiceResponse> call, Throwable t) {
+
+                                    }
+                                });
+                            }
+
                         }
                     }
                 });
