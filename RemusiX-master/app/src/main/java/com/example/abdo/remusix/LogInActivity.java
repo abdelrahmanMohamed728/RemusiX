@@ -43,7 +43,7 @@ public class LogInActivity extends AppCompatActivity {
                 myIntent.putExtra("password",password.toString());
                 myIntent.putExtra("username",email.getText().toString());
                 startActivity(myIntent);
-                finish();
+                finishAffinity();
             }
         });
 

@@ -61,7 +61,7 @@ public class ArtistActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                      txt.setText(response.getString("name"));
-                     Picasso.with(ArtistActivity.this).load(response.getString("picture")).into(img);
+                     Picasso.with(ArtistActivity.this).load(response.getString("picture_medium")).into(img);
 
                 }
                 catch (Exception e)

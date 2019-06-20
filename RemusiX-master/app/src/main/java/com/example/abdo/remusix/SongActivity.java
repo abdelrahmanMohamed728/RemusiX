@@ -42,7 +42,7 @@ public class SongActivity extends AppCompatActivity {
         super.onStart();
         check=false;
     }
-
+TrackPlayer trackPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,42 +54,32 @@ public class SongActivity extends AppCompatActivity {
         btn = findViewById(R.id.songButton);
          id = getIntent().getStringExtra("songid");
         LoadData("https://api.deezer.com/track/"+id);
-
-
-
-
-
-            btn.setOnClickListener(new View.OnClickListener() {
+      final   String applicationID = "351984";
+      final   DeezerConnect deezerConnect = new DeezerConnect(SongActivity.this, applicationID);
+        try {
+            trackPlayer = new TrackPlayer(getApplication(), deezerConnect, new WifiAndMobileNetworkStateChecker());
+        } catch (TooManyPlayersExceptions tooManyPlayersExceptions) {
+            tooManyPlayersExceptions.printStackTrace();
+        } catch (DeezerError deezerError) {
+            deezerError.printStackTrace();
+        }
+        btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String applicationID = "351984";
-                    DeezerConnect deezerConnect = new DeezerConnect(SongActivity.this, applicationID);
 
-                    TrackPlayer trackPlayer = null;
-                    try {
-                        trackPlayer = new TrackPlayer(getApplication(), deezerConnect, new WifiAndMobileNetworkStateChecker());
-                    } catch (TooManyPlayersExceptions tooManyPlayersExceptions) {
-                        tooManyPlayersExceptions.printStackTrace();
-                    } catch (DeezerError deezerError) {
-                        deezerError.printStackTrace();
-                    }
-                    if (!check) {
+                        if (!check)
+                        {
+                            trackPlayer.playTrack(Long.parseLong(id));
+                            check = true;
+                            btn.setText("Stop");
+                        } else {
+                            trackPlayer.stop();
+                            check = false;
+                            btn.setText("Listen Now");
 
-                        trackPlayer.playTrack(Long.parseLong(id));
-                        check = true;
-                        btn.setText("Stop");
-                    } else {
-                        trackPlayer.stop();
-                        check = false;
-                        btn.setText("Listen Now");
-
-                    }
+                        }
                 }
-
             });
-
-
-
 
     }
     public void LoadData(String url)
@@ -100,13 +90,14 @@ public class SongActivity extends AppCompatActivity {
                 try {
 
                         JSONObject track = response;
-                        String img = track.getJSONObject("artist").getString("picture_small");
+                        String img = track.getJSONObject("artist").getString("picture_medium");
                         String name = track.getString("title");
                         String link = track.getString("link");
                         String artistid = track.getJSONObject("artist").getString("id");
                         String id = track.getString("id");
                         Picasso.with(SongActivity.this).load(img).into(songImg);
                         songName.setText(name);
+                        Log.e("tag",name);
                         artistName.setText("by: "+track.getJSONObject("artist").getString("name"));
                         songLink=link;
                 }
@@ -124,5 +115,18 @@ public class SongActivity extends AppCompatActivity {
         });
         RequestQueue queue = Volley.newRequestQueue(SongActivity.this);
         queue.add(request);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            trackPlayer.stop();
+            check = false;
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }

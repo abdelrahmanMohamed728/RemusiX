@@ -63,9 +63,9 @@ public class TrendFragment extends Fragment {
                      JSONObject response1= response.getJSONObject("artists");
                      response = response.getJSONObject("tracks");
                      JSONArray array = response.getJSONArray("data");
-                     for (int i =0;i<9;i++) {
+                     for (int i =0;i<7;i++) {
                          JSONObject track = array.getJSONObject(i);
-                         String img = track.getJSONObject("artist").getString("picture_small");
+                         String img = track.getJSONObject("artist").getString("picture_medium");
                          String name = track.getString("title");
                          String link = track.getString("link");
                          String artistid = track.getJSONObject("artist").getString("id");
@@ -74,12 +74,12 @@ public class TrendFragment extends Fragment {
                          adapter.notifyDataSetChanged();
                      }
                     JSONArray array1 = response1.getJSONArray("data");
-                     for (int i =0;i<9;i++)
+                     for (int i =0;i<7;i++)
                      {
                          JSONObject artist = array1.getJSONObject(i);
                          String name = artist.getString("name");
                          String id = artist.getString("id");
-                         String img = artist.getString("picture_small");
+                         String img = artist.getString("picture_medium");
                          arrayList1.add(new Artist(id,name,img));
                          adapter1.notifyDataSetChanged();
                      }

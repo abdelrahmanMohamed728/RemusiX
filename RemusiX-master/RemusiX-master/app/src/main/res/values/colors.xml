@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#2d0c20</color>
-    <color name="colorPrimaryDark">#9c005c</color>
-    <color name="colorAccent">#b39baa</color>
-    <color name="notification">#6d5c66</color>
-    <color name="trend">#5d4453</color>
-</resources>
