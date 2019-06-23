@@ -1,16 +1,11 @@
 package com.example.abdo.remusix;
 
 public class Comment {
-    String usrname ,comment_time,likes,comment;
-    int user_img;
+   private String usrname ,comment_time;
+   private String user_img;
+   private String comment;
 
-    public Comment(String usrname, String comment_time, String likes, String comment, int user_img) {
-        this.usrname = usrname;
-        this.comment_time = comment_time;
-        this.likes = likes;
-        this.comment = comment;
-        this.user_img = user_img;
-    }
+
 
     public String getUsrname() {
         return usrname;
@@ -28,12 +23,12 @@ public class Comment {
         this.comment_time = comment_time;
     }
 
-    public String getLikes() {
-        return likes;
+    public String getUser_img() {
+        return user_img;
     }
 
-    public void setLikes(String likes) {
-        this.likes = likes;
+    public void setUser_img(String user_img) {
+        this.user_img = user_img;
     }
 
     public String getComment() {
@@ -44,11 +39,10 @@ public class Comment {
         this.comment = comment;
     }
 
-    public int getUser_img() {
-        return user_img;
-    }
-
-    public void setUser_img(int user_img) {
+    public Comment(String usrname, String comment_time, String user_img, String comment) {
+        this.usrname = usrname;
+        this.comment_time = comment_time;
         this.user_img = user_img;
+        this.comment = comment;
     }
 }

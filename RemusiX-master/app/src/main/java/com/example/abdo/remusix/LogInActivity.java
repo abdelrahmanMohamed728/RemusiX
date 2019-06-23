@@ -39,9 +39,8 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
-                myIntent.putExtra("Email",email.toString());
-                myIntent.putExtra("password",password.toString());
                 myIntent.putExtra("username",email.getText().toString());
+                myIntent.putExtra("password",password.getText().toString());
                 startActivity(myIntent);
                 finishAffinity();
             }
@@ -55,18 +54,12 @@ public class LogInActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         Intent myIntent =new Intent(LogInActivity.this,MainActivity.class);
-                        myIntent.putExtra("email",email.toString());
-                        myIntent.putExtra("password",password.toString());
+                        myIntent.putExtra("email",email.getText().toString());
+                        myIntent.putExtra("password",password.getText().toString());
                         myIntent.putExtra("userid",response.getString("UserID"));
                         myIntent.putExtra("username",response.getString("UserName"));
                         startActivity(myIntent);
-                        sharedPreferences = getSharedPreferences("MyPref",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("email",email.toString());
-                        editor.putString("Password",password.toString());
-                        editor.putString("userid",response.getString("UserID"));
-                        editor.putString("username",response.getString("UserName"));
-                        finish();
+                        finishAffinity();
                     }
                     catch (Exception e)
                     {

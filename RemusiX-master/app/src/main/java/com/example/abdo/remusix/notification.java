@@ -1,23 +1,32 @@
 package com.example.abdo.remusix;
 
 public class notification {
-    private int Image;
+    private String Image;
     private String username;
     private String action;
     private String time;
+    private String postid;
 
-    public notification(int image, String username, String action, String time) {
+    public String getPostid() {
+        return postid;
+    }
+
+    public void setPostid(String postid) {
+        this.postid = postid;
+    }
+
+    public notification(String  image, String username, String action, String time) {
         Image = image;
         this.username = username;
         this.action = action;
         this.time = time;
     }
 
-    public int getImage() {
+    public String getImage() {
         return Image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         Image = image;
     }
 

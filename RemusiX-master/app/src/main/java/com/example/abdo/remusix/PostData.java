@@ -1,6 +1,8 @@
 package com.example.abdo.remusix;
 
-public class PostData {
+import java.io.Serializable;
+
+public class PostData implements Serializable {
 
         private String id;
        private String name ,time;
